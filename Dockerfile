@@ -3,7 +3,7 @@
 # 云监工原作者powergx
 
 # 基础镜像
-FROM ubuntu:latest
+FROM tutum/ubuntu:latest
 MAINTAINER wight3 <wight3@126.com>
 
 RUN rm /bin/sh &&  ln -s /bin/bash /bin/sh
