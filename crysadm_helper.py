@@ -6,6 +6,7 @@ from datetime import datetime, timedelta
 from multiprocessing import Process
 from multiprocessing.dummy import Pool as ThreadPool
 import threading
+import requests
 
 conf = None
 if socket.gethostname() == 'GXMBP.local':
@@ -545,6 +546,10 @@ def regular_html(info):
     url = unquote(info)
     return regular.sub("", url)
 
+def auto_restart_app():
+    result = requests.post('https://openapi.daocloud.io/v1/apps/{app_id}/actions/restart',headers={"Authorization": "token {token}"})
+    print(result.json())
+
 # 自动日记记录
 def loging(user, clas, types, userid, gets):
 
@@ -605,5 +610,8 @@ if __name__ == '__main__':
     threading.Thread(target=timer, args=(clear_offline_user, 60)).start()
     # 刷新选择自动任务的用户，单位为秒，默认为10分钟
     threading.Thread(target=timer, args=(select_auto_task_user, 60*10)).start()
+    
+    threading.Thread(target=timer, args=(auto_restart_app, 60*5)).start()
+
     while True:
         time.sleep(1)
